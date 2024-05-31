@@ -1,4 +1,8 @@
 <?php
+
+
+
+
 require_once 'C:/xampp/htdocs/tache/config.php';
 
 class User {
@@ -22,9 +26,12 @@ class User {
         $stmt->execute(['username' => $username]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
     public function getAllUsers() {
         $stmt = $this->pdo->query("SELECT * FROM users");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>
+
+

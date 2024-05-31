@@ -1,3 +1,26 @@
+
+<?php
+session_start();
+require_once 'C:/xampp/htdocs/tache/controllers/UserController.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $userController = new UserController();
+    $user = $userController->login($username, $password);
+
+    if ($user) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
+        header("Location: /tache/views/task.php");
+        exit();
+    } else {
+        $error = "Invalid username or password.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,7 +32,7 @@
 <body>
     <div class="wrapper">
         <header>Login</header>
-        <form method="POST" action="index.php">
+        <form method="POST" action="/tache/index.php">
             <div class="field">
                 <div class="input-area">
                     <i class="fas fa-user-circle"></i>
@@ -22,6 +45,9 @@
                     <input type="password" id="password" placeholder="Password" name="password" required>
                 </div>
             </div>
+            <?php if (isset($error)): ?>
+                <p style="color:red;"><?php echo $error; ?></p>
+            <?php endif; ?>
             <input type="submit" value="Login" name="login">
         </form>
     </div>

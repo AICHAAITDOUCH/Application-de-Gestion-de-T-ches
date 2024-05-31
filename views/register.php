@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <form action="index.php" method="post" class="registration-form">
+        <form action="/tache/index.php" method="post" class="registration-form">
             <h2>Inscription</h2>
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
@@ -27,6 +27,7 @@
     </div>
 </body>
 </html>
+
 
 
 <style>

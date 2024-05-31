@@ -1,8 +1,24 @@
 <?php
-require_once 'C:/xampp/htdocs/tache/controllers/TaskController.php';
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /tache/views/login.php");
+    exit();
+}
 
+require_once __DIR__ . '/../controllers/TaskController.php';
+
+$user_id = $_SESSION['user_id'];
 $taskController = new TaskController();
-$tasks = $taskController->getTasks();
+$tasks = $taskController->getUserTasks($user_id);
+
+if (isset($_GET['logout'])) {
+    $_SESSION = array();
+
+    session_destroy();
+
+    header("Location: /tache/views/login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,17 +27,17 @@ $tasks = $taskController->getTasks();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table des Tâches</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/tache/styles.css">
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="../A.png" alt="Logo">
+            <img src="/tache/A.png" alt="Logo">
         </div>
         <nav>
             <ul>
                 <li><a href="task.php">Home</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a href="?logout=true">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -87,13 +103,14 @@ $tasks = $taskController->getTasks();
     $(document).ready(function(){
         $('#search-title-button').click(function(){
             var searchTerm = $('#search-input').val().trim();
+            var priority = $('#priority-filter').val();
 
             $.ajax({
                 url: 'search.php',
                 type: 'POST',
                 data: {
                     search_term: searchTerm,
-                    priority: ''
+                    priority: priority
                 },
                 success: function(response){
                     $('tbody').html(response);
@@ -105,13 +122,14 @@ $tasks = $taskController->getTasks();
         });
 
         $('#search-priority-button').click(function(){
+            var searchTerm = $('#search-input').val().trim();
             var priority = $('#priority-filter').val();
 
             $.ajax({
                 url: 'search.php',
                 type: 'POST',
                 data: {
-                    search_term: '',
+                    search_term: searchTerm,
                     priority: priority
                 },
                 success: function(response){
@@ -164,6 +182,7 @@ $tasks = $taskController->getTasks();
     </script>
 </body>
 </html>
+
 
 
 <style>
@@ -331,5 +350,62 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .search-item {
+        flex-direction: column;
+    }
+
+    input[type="text"],
+    select {
+        width: 100%;
+    }
+
+    table {
+        overflow-x: auto;
+        display: block;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table thead,
+    table tbody,
+    table th,
+    table td,
+    table tr {
+        display: block;
+    }
+
+    table th,
+    table td {
+        padding: 8px;
+        text-align: left;
+        width: auto;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    table tbody {
+        height: calc(100vh - 250px); 
+        overflow-y: auto;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: auto;
+        height: auto;
+    }
 }
 </style>

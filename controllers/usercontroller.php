@@ -1,4 +1,47 @@
 <?php
+
+
+
+
+    // public function register() {
+    //     $username = $_POST['username'];
+    //     $email = $_POST['email'];
+    //     $password = $_POST['password'];
+
+    //     if ($this->userModel->create($username, $email, $password)) {
+    //         // header('Location: /tache/index.php?action=login');
+    //         header('Location: /tache/views/login.php');
+    //         exit();
+    //     } else {
+    //         echo "Registration failed!";
+    //     }
+    // }
+
+   
+    // public function login() {
+    //     $username = $_POST['username'];
+    //     $password = $_POST['password'];
+    
+    //     $user = $this->userModel->find($username);
+    
+    //     if ($user && $password === $user['password']) {
+    //         session_start();
+    //         $_SESSION['user_id'] = $user['id'];
+    //         $_SESSION['username'] = $user['username'];
+            
+    //         if ($username === 'admin') {
+    //             header('Location: /tache/views/pageadmin.php');
+    //         } else {
+    //             header('Location: /tache/views/task.php');
+    //         }
+    //         exit();
+    //     } else {
+    //         // echo "<div class='error-message'>Login failed! Invalid username or password.</div>";
+    //     }
+    // }
+
+
+
 require_once __DIR__ . '/../config.php'; 
 require_once __DIR__ . '/TaskController.php'; 
 require_once __DIR__ . '/../models/User.php'; 
@@ -26,10 +69,14 @@ class UserController {
     public function login() {
         $username = $_POST['username'];
         $password = $_POST['password'];
-
+    
         $user = $this->userModel->find($username);
-
+    
         if ($user && $password === $user['password']) {
+            session_start();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            
             if ($username === 'admin') {
                 header('Location: /tache/views/pageadmin.php');
             } else {
@@ -37,7 +84,7 @@ class UserController {
             }
             exit();
         } else {
-            echo "<div class='error-message'>Login failed! Invalid username or password.</div>";
+            echo "Login failed! Invalid username or password.";
         }
     }
 
@@ -54,3 +101,5 @@ class UserController {
     }
 }
 ?>
+
+

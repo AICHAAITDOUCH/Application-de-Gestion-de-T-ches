@@ -32,7 +32,7 @@ $stmt->closeCursor();
 $conn = null; 
 
 
-    header("Location: ../views/task.php");
+    header("Location: ../views/pageadmin.php");
     exit();
 }
 ?>
